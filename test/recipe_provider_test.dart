@@ -29,6 +29,58 @@ void main() {
       expect(results.every((r) => r.category == 'Dessert'), isTrue);
     });
 
+    test('search combine mot-clé et catégorie simultanément', () {
+      final provider = RecipeProvider();
+      final results = provider.search(query: 'tarte', category: 'Dessert');
+      expect(results, isNotEmpty);
+      expect(
+        results.every(
+          (r) => r.category == 'Dessert' && r.title.toLowerCase().contains('tarte'),
+        ),
+        isTrue,
+      );
+    });
+
+    test('search est insensible à la casse', () {
+      final provider = RecipeProvider();
+      final lower = provider.search(query: 'chocolat');
+      final upper = provider.search(query: 'CHOCOLAT');
+      expect(upper.length, lower.length);
+      expect(upper.map((r) => r.id), lower.map((r) => r.id));
+    });
+
+    test('search ignore les espaces superflus dans la requête', () {
+      final provider = RecipeProvider();
+      final trimmed = provider.search(query: 'chocolat');
+      final padded = provider.search(query: '   chocolat   ');
+      expect(padded.length, trimmed.length);
+    });
+
+    test('search avec une requête vide et sans catégorie renvoie tout', () {
+      final provider = RecipeProvider();
+      final results = provider.search();
+      expect(results.length, provider.recipes.length);
+    });
+
+    test('search avec catégorie "Toutes" ignore le filtre de catégorie', () {
+      final provider = RecipeProvider();
+      final withAll = provider.search(category: 'Toutes');
+      final withoutFilter = provider.search();
+      expect(withAll.length, withoutFilter.length);
+    });
+
+    test('search renvoie une liste vide si rien ne correspond', () {
+      final provider = RecipeProvider();
+      final results = provider.search(query: 'motclefinexistantxyz123');
+      expect(results, isEmpty);
+    });
+
+    test('search avec une catégorie inexistante renvoie une liste vide', () {
+      final provider = RecipeProvider();
+      final results = provider.search(category: 'CatégorieInexistante');
+      expect(results, isEmpty);
+    });
+
     test('favoritesAmong filtre les recettes selon un ensemble d\'ids', () {
       final provider = RecipeProvider();
       final firstId = provider.recipes.first.id;

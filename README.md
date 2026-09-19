@@ -4,8 +4,6 @@ Application Flutter de démonstration sur le thème des **recettes de cuisine**,
 construite pour valider la maîtrise des widgets Flutter et de la navigation
 multi-écrans.
 
-
-
 ## 📱 Aperçu des écrans
 
 | Écran | Description |
