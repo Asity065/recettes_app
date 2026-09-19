@@ -3,13 +3,11 @@ import 'package:flutter/foundation.dart';
 import '../data/recipes_seed.dart';
 import '../models/recipe.dart';
 
-/// Source de vérité unique pour les recettes et les favoris.
-///
-/// Toutes les données affichées par l'UI passent par ce provider :
-/// aucun widget ne contient de recette codée en dur.
+/// Source de vérité unique pour le catalogue de recettes (recherche,
+/// filtrage, ajout). La gestion des favoris est déléguée à
+/// [FavoritesProvider] pour garder une responsabilité unique par provider.
 class RecipeProvider extends ChangeNotifier {
   final List<Recipe> _recipes = List<Recipe>.from(seedRecipes);
-  final Set<String> _favoriteIds = <String>{};
 
   /// Liste (non modifiable depuis l'extérieur) de toutes les recettes.
   List<Recipe> get recipes => List.unmodifiable(_recipes);
@@ -21,20 +19,11 @@ class RecipeProvider extends ChangeNotifier {
     return unique;
   }
 
-  /// Recettes actuellement marquées comme favorites.
-  List<Recipe> get favorites =>
-      _recipes.where((r) => _favoriteIds.contains(r.id)).toList();
-
-  bool isFavorite(String id) => _favoriteIds.contains(id);
-
-  void toggleFavorite(String id) {
-    if (_favoriteIds.contains(id)) {
-      _favoriteIds.remove(id);
-    } else {
-      _favoriteIds.add(id);
-    }
-    notifyListeners();
-  }
+  /// Filtre le catalogue selon un ensemble d'identifiants favoris fourni
+  /// par [FavoritesProvider]. Ce provider ne connaît pas lui-même l'état
+  /// des favoris : on le lui passe explicitement.
+  List<Recipe> favoritesAmong(Set<String> favoriteIds) =>
+      _recipes.where((r) => favoriteIds.contains(r.id)).toList();
 
   /// Recherche + filtrage combinés, utilisés par l'écran d'accueil.
   List<Recipe> search({String query = '', String? category}) {

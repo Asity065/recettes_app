@@ -29,18 +29,20 @@ void main() {
       expect(results.every((r) => r.category == 'Dessert'), isTrue);
     });
 
-    test('toggleFavorite ajoute puis retire un favori', () {
+    test('favoritesAmong filtre les recettes selon un ensemble d\'ids', () {
       final provider = RecipeProvider();
-      final id = provider.recipes.first.id;
+      final firstId = provider.recipes.first.id;
 
-      expect(provider.isFavorite(id), isFalse);
+      final result = provider.favoritesAmong({firstId});
 
-      provider.toggleFavorite(id);
-      expect(provider.isFavorite(id), isTrue);
-      expect(provider.favorites.any((r) => r.id == id), isTrue);
+      expect(result.length, 1);
+      expect(result.first.id, firstId);
+    });
 
-      provider.toggleFavorite(id);
-      expect(provider.isFavorite(id), isFalse);
+    test('favoritesAmong renvoie une liste vide si aucun id ne correspond', () {
+      final provider = RecipeProvider();
+      final result = provider.favoritesAmong({'id-inexistant'});
+      expect(result, isEmpty);
     });
 
     test('addRecipe insère une nouvelle recette en tête de liste', () {

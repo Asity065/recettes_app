@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/favorites_provider.dart';
 import '../providers/recipe_provider.dart';
 import '../utils/responsive.dart';
 import '../widgets/rating_stars.dart';
@@ -28,7 +29,7 @@ class RecipeDetailScreen extends StatelessWidget {
       );
     }
 
-    final isFavorite = context.watch<RecipeProvider>().isFavorite(recipe.id);
+    final isFavorite = context.watch<FavoritesProvider>().isFavorite(recipe.id);
     final isTablet = Responsive.isTablet(context);
 
     final ingredientsCard = Card(
@@ -138,7 +139,7 @@ class RecipeDetailScreen extends StatelessWidget {
                 tooltip: isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris',
                 icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
                 onPressed: () =>
-                    context.read<RecipeProvider>().toggleFavorite(recipe.id),
+                    context.read<FavoritesProvider>().toggleFavorite(recipe.id),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(

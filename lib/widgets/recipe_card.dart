@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../models/recipe.dart';
-import '../providers/recipe_provider.dart';
+import '../providers/favorites_provider.dart';
 import 'rating_stars.dart';
 import 'recipe_image.dart';
 
@@ -20,7 +20,7 @@ class RecipeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = context.watch<RecipeProvider>().isFavorite(recipe.id);
+    final isFavorite = context.watch<FavoritesProvider>().isFavorite(recipe.id);
 
     return Card(
       child: InkWell(
@@ -52,7 +52,7 @@ class RecipeCard extends StatelessWidget {
                           color: isFavorite ? Colors.redAccent : Colors.white,
                         ),
                         onPressed: () =>
-                            context.read<RecipeProvider>().toggleFavorite(recipe.id),
+                            context.read<FavoritesProvider>().toggleFavorite(recipe.id),
                       ),
                     ),
                   ),

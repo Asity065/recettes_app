@@ -4,6 +4,14 @@ Application Flutter de démonstration sur le thème des **recettes de cuisine**,
 construite pour valider la maîtrise des widgets Flutter et de la navigation
 multi-écrans.
 
+> ⚠️ Ce projet a été écrit à la main, fichier par fichier, sans accès à un
+> environnement Flutter pour le compiler. La syntaxe Dart a été relue
+> attentivement à deux reprises (voir [`CHANGELOG.md`](CHANGELOG.md) pour le
+> détail des corrections apportées en v1.1), mais faites `flutter pub get`
+> puis `flutter run` avant de livrer, et corrigez au besoin une éventuelle
+> coquille mineure liée à une version de package différente (voir la
+> section *Dépannage*).
+
 ## 📱 Aperçu des écrans
 
 | Écran | Description |
@@ -74,7 +82,8 @@ lib/
 ├── data/
 │   └── recipes_seed.dart          # Jeu de données initial (aucune donnée dans l'UI)
 ├── providers/
-│   ├── recipe_provider.dart       # État recettes/favoris + recherche/filtrage
+│   ├── recipe_provider.dart       # Catalogue de recettes : données, recherche, filtrage, ajout
+│   ├── favorites_provider.dart    # État des favoris (séparé du catalogue)
 │   └── theme_provider.dart        # État du thème clair/sombre/système
 ├── router/
 │   └── app_router.dart            # Configuration GoRouter (routes nommées)
@@ -96,7 +105,14 @@ lib/
     ├── section_header.dart
     └── empty_state.dart
 test/
-└── recipe_provider_test.dart      # Tests unitaires sur la logique métier
+├── recipe_provider_test.dart       # Recherche, filtrage, ajout, favoritesAmong
+├── favorites_provider_test.dart    # État des favoris
+├── recipe_model_test.dart          # Modèle Recipe (copyWith, difficultyLabel)
+├── theme_provider_test.dart        # État du thème
+├── widgets_test.dart                # Tests de widgets (RatingStars, EmptyState)
+└── search_filter_bar_test.dart      # Tests d'interaction (saisie, tap sur chip)
+.github/workflows/
+└── flutter_ci.yml                  # CI : flutter analyze + flutter test à chaque push/PR
 ```
 
 ## 🛠️ Stack technique
@@ -105,6 +121,27 @@ test/
 - [`go_router`](https://pub.dev/packages/go_router) — navigation déclarative, routes nommées
 - [`provider`](https://pub.dev/packages/provider) — gestion d'état (recettes, favoris, thème)
 - Images de démonstration via [picsum.photos](https://picsum.photos) (nécessite une connexion internet à l'exécution)
+
+## 🧪 Tests
+
+6 fichiers de test couvrant deux niveaux :
+
+- **Tests unitaires** de la logique métier : providers (`RecipeProvider`,
+  `FavoritesProvider`, `ThemeProvider`) et modèle (`Recipe`, notamment
+  `copyWith`).
+- **Tests de widgets** (`testWidgets` + `pumpWidget`) : rendu réel de
+  `RatingStars` et `EmptyState`, et tests d'interaction utilisateur
+  (saisie de texte, tap sur un chip) sur `SearchFilterBar`.
+
+```bash
+flutter test
+```
+
+## 🤖 Intégration continue
+
+Un workflow GitHub Actions (`.github/workflows/flutter_ci.yml`) exécute
+automatiquement `flutter analyze` et `flutter test` à chaque push et pull
+request vers `main`. Il utilise le canal stable de Flutter.
 
 ## 🚀 Installation et lancement
 
@@ -128,7 +165,7 @@ flutter run                # sur l'appareil/émulateur connecté par défaut
 flutter run -d chrome      # sur navigateur (Flutter Web)
 flutter devices            # pour lister les cibles disponibles
 
-# 4. Lancer les tests unitaires (8 tests sur 2 fichiers)
+# 4. Lancer les tests (unitaires + widgets)
 flutter test
 ```
 

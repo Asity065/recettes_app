@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/favorites_provider.dart';
 import '../providers/recipe_provider.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/rating_stars.dart';
@@ -9,14 +10,17 @@ import '../widgets/recipe_image.dart';
 
 /// Écran listant les recettes marquées comme favorites.
 ///
-/// Utilise volontairement une [ListView] (plutôt qu'une grille) pour
-/// varier les types de widgets utilisés dans l'application.
+/// Combine deux providers : [RecipeProvider] pour les données du
+/// catalogue et [FavoritesProvider] pour savoir quels identifiants sont
+/// favoris. Utilise volontairement une [ListView] (plutôt qu'une grille)
+/// pour varier les types de widgets utilisés dans l'application.
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final favorites = context.watch<RecipeProvider>().favorites;
+    final favoriteIds = context.watch<FavoritesProvider>().favoriteIds;
+    final favorites = context.watch<RecipeProvider>().favoritesAmong(favoriteIds);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Mes favoris')),
@@ -57,7 +61,7 @@ class FavoritesScreen extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.favorite, color: Colors.redAccent),
                       onPressed: () =>
-                          context.read<RecipeProvider>().toggleFavorite(recipe.id),
+                          context.read<FavoritesProvider>().toggleFavorite(recipe.id),
                     ),
                     onTap: () => context
                         .pushNamed('detail', pathParameters: {'id': recipe.id}),

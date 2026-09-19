@@ -31,6 +31,35 @@ class Recipe {
     required this.steps,
   });
 
+  /// Retourne une copie de cette recette avec les champs fournis
+  /// remplacés. Pratique pour créer une variante modifiée sans muter
+  /// l'instance d'origine (le modèle reste immuable).
+  Recipe copyWith({
+    String? id,
+    String? title,
+    String? category,
+    String? description,
+    String? imageUrl,
+    int? prepTimeMinutes,
+    Difficulty? difficulty,
+    double? rating,
+    List<String>? ingredients,
+    List<String>? steps,
+  }) {
+    return Recipe(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      category: category ?? this.category,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      prepTimeMinutes: prepTimeMinutes ?? this.prepTimeMinutes,
+      difficulty: difficulty ?? this.difficulty,
+      rating: rating ?? this.rating,
+      ingredients: ingredients ?? this.ingredients,
+      steps: steps ?? this.steps,
+    );
+  }
+
   /// Libellé lisible de la difficulté, utilisé dans l'UI.
   String get difficultyLabel {
     switch (difficulty) {
