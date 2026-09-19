@@ -4,6 +4,14 @@ Application Flutter de démonstration sur le thème des **recettes de cuisine**,
 construite pour valider la maîtrise des widgets Flutter et de la navigation
 multi-écrans.
 
+> ⚠️ Ce projet a été écrit à la main, fichier par fichier, sans accès à un
+> environnement Flutter pour le compiler. La syntaxe Dart a été relue
+> attentivement à deux reprises (voir [`CHANGELOG.md`](CHANGELOG.md) pour le
+> détail des corrections apportées en v1.1), mais faites `flutter pub get`
+> puis `flutter run` avant de livrer, et corrigez au besoin une éventuelle
+> coquille mineure liée à une version de package différente (voir la
+> section *Dépannage*).
+
 ## 📱 Aperçu des écrans
 
 | Écran | Description |
@@ -61,6 +69,8 @@ un dossier `screenshots/` : `screenshots/accueil.png`,
 - `RatingStars` — étoiles de notation (accueil, favoris, détail).
 - `SectionHeader` — en-tête de section avec icône (détail, réglages).
 - `EmptyState` — état vide générique (aucun résultat / aucun favori).
+- `RecipeImage` — image réseau avec chargement/repli, utilisée par la carte,
+  les favoris et le détail (ajouté en v1.1, voir `CHANGELOG.md`).
 
 ## 🗂️ Architecture du projet
 
@@ -126,7 +136,7 @@ flutter run                # sur l'appareil/émulateur connecté par défaut
 flutter run -d chrome      # sur navigateur (Flutter Web)
 flutter devices            # pour lister les cibles disponibles
 
-# 4. Lancer les tests unitaires
+# 4. Lancer les tests unitaires (8 tests sur 2 fichiers)
 flutter test
 ```
 
@@ -159,14 +169,6 @@ Pensez ensuite à :
 
 ## 🩹 Dépannage
 
-- **Erreur `initialValue` inconnu sur `DropdownButtonFormField`** : certaines
-  anciennes versions de Flutter utilisent `value:` au lieu de `initialValue:`.
-  Si votre SDK est plus ancien que Flutter 3.24, remplacez `initialValue:` par
-  `value:` dans `lib/screens/add_recipe_screen.dart`.
-- **Erreur sur `colorScheme.surfaceVariant`** : ce champ a été renommé
-  `surfaceContainerHighest` dans les versions très récentes de Flutter. En cas
-  d'erreur, remplacez `surfaceVariant` par `surfaceContainerHighest` dans
-  `recipe_card.dart` et `favorites_screen.dart`.
 - **Images qui ne s'affichent pas** : les images de démonstration viennent de
   `picsum.photos` et nécessitent une connexion internet sur l'appareil/émulateur ;
   en cas d'absence de réseau, un `Icon(Icons.restaurant)` de repli s'affiche

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/recipe_provider.dart';
 import '../utils/responsive.dart';
 import '../widgets/rating_stars.dart';
+import '../widgets/recipe_image.dart';
 import '../widgets/section_header.dart';
 
 /// Écran de détail d'une recette.
@@ -134,6 +135,7 @@ class RecipeDetailScreen extends StatelessWidget {
             pinned: true,
             actions: [
               IconButton(
+                tooltip: isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris',
                 icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
                 onPressed: () =>
                     context.read<RecipeProvider>().toggleFavorite(recipe.id),
@@ -142,14 +144,7 @@ class RecipeDetailScreen extends StatelessWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'recipe-image-${recipe.id}',
-                child: Image.network(
-                  recipe.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stack) => Container(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: const Icon(Icons.restaurant, size: 48),
-                  ),
-                ),
+                child: RecipeImage(imageUrl: recipe.imageUrl),
               ),
             ),
           ),

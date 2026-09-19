@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
 import 'rating_stars.dart';
+import 'recipe_image.dart';
 
 /// Carte affichant l'aperçu d'une recette (image, catégorie, note,
 /// temps de préparation) et permettant de basculer le favori ou
@@ -34,23 +35,7 @@ class RecipeCard extends StatelessWidget {
                 children: [
                   Hero(
                     tag: 'recipe-image-${recipe.id}',
-                    child: Image.network(
-                      recipe.imageUrl,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return Container(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          child: const Center(
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stack) => Container(
-                        color: Theme.of(context).colorScheme.surfaceVariant,
-                        child: const Icon(Icons.restaurant, size: 40),
-                      ),
-                    ),
+                    child: RecipeImage(imageUrl: recipe.imageUrl),
                   ),
                   Positioned(
                     top: 4,
@@ -59,6 +44,9 @@ class RecipeCard extends StatelessWidget {
                       color: Colors.black45,
                       shape: const CircleBorder(),
                       child: IconButton(
+                        tooltip: isFavorite
+                            ? 'Retirer des favoris'
+                            : 'Ajouter aux favoris',
                         icon: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
                           color: isFavorite ? Colors.redAccent : Colors.white,

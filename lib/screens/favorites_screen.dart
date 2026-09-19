@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/recipe_provider.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/rating_stars.dart';
+import '../widgets/recipe_image.dart';
 
 /// Écran listant les recettes marquées comme favorites.
 ///
@@ -38,17 +39,10 @@ class FavoritesScreen extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(12),
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        recipe.imageUrl,
+                      child: SizedBox(
                         width: 64,
                         height: 64,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stack) => Container(
-                          width: 64,
-                          height: 64,
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          child: const Icon(Icons.restaurant),
-                        ),
+                        child: RecipeImage(imageUrl: recipe.imageUrl),
                       ),
                     ),
                     title: Text(

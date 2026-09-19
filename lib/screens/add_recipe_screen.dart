@@ -26,6 +26,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   String _category = 'Plat';
   Difficulty _difficulty = Difficulty.facile;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   static const List<String> _categories = [
     'Entrée',
@@ -45,6 +46,10 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
   }
 
   void _submit() {
+    // Dès qu'un premier submit échoue, on repasse en validation "live"
+    // pour guider l'utilisateur champ par champ.
+    setState(() => _autovalidateMode = AutovalidateMode.onUserInteraction);
+
     if (!_formKey.currentState!.validate()) return;
 
     final ingredients = _ingredientsController.text
@@ -94,6 +99,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       appBar: AppBar(title: const Text('Nouvelle recette')),
       body: Form(
         key: _formKey,
+        autovalidateMode: _autovalidateMode,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -112,7 +118,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              initialValue: _category,
+              value: _category,
               decoration: const InputDecoration(
                 labelText: 'Catégorie',
                 prefixIcon: Icon(Icons.category_outlined),
@@ -146,7 +152,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<Difficulty>(
-              initialValue: _difficulty,
+              value: _difficulty,
               decoration: const InputDecoration(
                 labelText: 'Difficulté',
                 prefixIcon: Icon(Icons.speed),
