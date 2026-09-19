@@ -4,12 +4,6 @@ Application Flutter de démonstration sur le thème des **recettes de cuisine**,
 construite pour valider la maîtrise des widgets Flutter et de la navigation
 multi-écrans.
 
-> ⚠️ Ce projet a été écrit à la main, fichier par fichier, sans accès à un
-> environnement Flutter pour le compiler. La syntaxe Dart a été relue
-> attentivement, mais faites `flutter pub get` puis `flutter run` avant de
-> livrer, et corrigez au besoin une éventuelle coquille mineure liée à une
-> version de package différente (voir la section *Dépannage*).
-
 ## 📱 Aperçu des écrans
 
 | Écran | Description |
